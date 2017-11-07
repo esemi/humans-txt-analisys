@@ -11,7 +11,7 @@ from async_timeout import timeout
 from db import get_domains_for_crawling, save_humans_txt, is_success_response
 
 MAX_CLIENTS = 5000
-LIMIT_DOMAINS = 10000
+LIMIT_DOMAINS = 1000000
 TIMEOUT = 20
 
 
@@ -24,7 +24,7 @@ async def task(rank, domain, sem: asyncio.Semaphore, cnt: Counter):
     async def fetch(url) -> tuple:
         try:
             async with timeout(TIMEOUT):
-                async with session.get(url, allow_redirects=False) as resp:
+                async with session.get(url, allow_redirects=False, verify_ssl=False) as resp:
                     logging.debug('response %s %s', resp.url, resp.status)
                     content = await resp.text(errors='ignore')
                     return resp.status, content, resp.url
@@ -45,6 +45,9 @@ async def task(rank, domain, sem: asyncio.Semaphore, cnt: Counter):
             cnt[code] += 1
             await save_humans_txt(domain, rank, content, code)
 
+            if not sum(cnt.values()) % 1000:
+                logging.info('progress counters %s', cnt.items())
+
 
 async def run():
     domains = get_domains_for_crawling(LIMIT_DOMAINS)
@@ -55,6 +58,7 @@ async def run():
     sem = asyncio.Semaphore(MAX_CLIENTS)
     cnt = Counter()
     tasks = [asyncio.ensure_future(task(rank, root_domain, sem, cnt)) for rank, root_domain in domains]
+    del domains
     await asyncio.wait(tasks)
     logging.info('end with counters %s', cnt.items())
 
