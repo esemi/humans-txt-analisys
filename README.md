@@ -1,12 +1,17 @@
-# humans-txt-analisys
+humanstxt-analisys
+---
 
-humans.txt analisys
+Небольшой пет проект по анализу частоты использования [humans.txt](https://humanstxt.org/RU) на просторах сети.
 
-https://github.com/benfred/bens-blog-code/blob/master/robots.txt-analysis/crawler.py
+Оказалось, никому он не нужен =(
 
-https://habrahabr.ru/post/341774/
+### Links
+- [robots.txt analisys](https://habrahabr.ru/post/341774/)
+- [robots.txt crawler](https://github.com/benfred/bens-blog-code/blob/master/robots.txt-analysis/crawler.py)
 
-```sh
+
+### Usage
+```
 $ pip install --upgrade virtualenv
 $ virtualenv -p python3.6 venv
 $ source venv/bin/activate
