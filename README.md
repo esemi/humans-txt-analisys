@@ -1,4 +1,4 @@
-humanstxt-analisys
+humanstxt-analysis
 ---
 
 Небольшой пет проект по анализу частоты использования [humans.txt](https://humanstxt.org/RU) на просторах сети.
